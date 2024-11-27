@@ -42,13 +42,13 @@ const ObstacleSetter = () => {
   const handleAddObstacle = () => {
     const { x, y } = newObstacle;
     
-    // Validate obstacle placement
+    // obstacle placement validation
     if (x < 0 || x >= gridSize.width || y < 0 || y >= gridSize.height) {
       setError(`Obstacle must be within grid (0-${gridSize.width-1}, 0-${gridSize.height-1})`);
       return;
     }
 
-    // Check for duplicate obstacles
+    // check for duplicate obstacles
     const isDuplicate = obstacles.some(
       obs => obs.x === Number(x) && obs.y === Number(y)
     );
@@ -72,10 +72,10 @@ const ObstacleSetter = () => {
   };
 
   return (
-    <div className="bg-gray-100 p-4 rounded-lg shadow-md space-y-4">
+    <div className="bg-[#661B30] p-4 rounded-lg shadow-md space-y-4 text-gray-200">
       <div>
         <h3 className="text-lg font-bold mb-4">Rover Initial Setup</h3>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <div>
             <label className="block mb-1">X Coordinate (0-14)</label>
             <input 
@@ -88,7 +88,7 @@ const ObstacleSetter = () => {
                 setInitialSetup(prev => ({ ...prev, x: value }));
                 setError(null);
               }}
-              className="p-2 border rounded w-full"
+              className="p-2 border rounded w-full text-gray-900"
             />
           </div>
           <div>
@@ -103,10 +103,10 @@ const ObstacleSetter = () => {
                 setInitialSetup(prev => ({ ...prev, y: value }));
                 setError(null);
               }}
-              className="p-2 border rounded w-full"
+              className="p-2 border rounded w-full text-gray-900"
             />
           </div>
-          <div className="col-span-2">
+          <div className="sm:col-span-2">
             <label className="block mb-1">Direction</label>
             <select
               value={initialSetup.direction}
@@ -114,7 +114,7 @@ const ObstacleSetter = () => {
                 setInitialSetup(prev => ({ ...prev, direction: e.target.value }));
                 setError(null);
               }}
-              className="p-2 border rounded w-full"
+              className="p-2 border rounded w-full text-gray-900"
             >
               <option value="N">North (↑)</option>
               <option value="S">South (↓)</option>
@@ -125,69 +125,72 @@ const ObstacleSetter = () => {
         </div>
         <button 
           onClick={handleInitialSetup} 
-          className="mt-2 w-full bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+          className="mt-2 w-full bg-[#290F1F] text-gray-200 px-4 py-2 rounded hover:bg-[#1F0A17] transition"
         >
-          Set Initial Rover Position
+          Set Rover Position
         </button>
         {error && (
-          <div className="mt-2 text-red-500 text-sm">
+          <div className="mt-2 text-red-300">
             {error}
           </div>
         )}
       </div>
 
+      {/* Obstacles Section */}
       <div>
         <h3 className="text-lg font-bold mb-4">Add Obstacles</h3>
-        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-          <div className="flex flex-col">
-            <label className="mb-1">X Coordinate (0-14)</label>
-            <input 
-              type="number" 
-              placeholder="X" 
-              min="0" 
-              max="14"
-              value={newObstacle.x}
-              onChange={(e) => {
-                const value = Math.min(14, Math.max(0, Number(e.target.value)));
-                setNewObstacle(prev => ({ ...prev, x: value }));
-                setError(null);
-              }}
-              className="p-2 border rounded w-24"
-            />
+        <div className="flex flex-col sm:flex-row items-end space-y-2 sm:space-y-0 sm:space-x-2">
+          <div className="flex space-x-2 w-full">
+            <div className="flex-1">
+              <label className="block mb-1">X Coordinate (0-14)</label>
+              <input 
+                type="number" 
+                placeholder="X" 
+                min="0" 
+                max="14"
+                value={newObstacle.x}
+                onChange={(e) => {
+                  const value = Math.min(14, Math.max(0, Number(e.target.value)));
+                  setNewObstacle(prev => ({ ...prev, x: value }));
+                  setError(null);
+                }}
+                className="p-2 border rounded w-full text-gray-900"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block mb-1">Y Coordinate (0-14)</label>
+              <input 
+                type="number" 
+                placeholder="Y" 
+                min="0" 
+                max="14"
+                value={newObstacle.y}
+                onChange={(e) => {
+                  const value = Math.min(14, Math.max(0, Number(e.target.value)));
+                  setNewObstacle(prev => ({ ...prev, y: value }));
+                  setError(null);
+                }}
+                className="p-2 border rounded w-full text-gray-900"
+              />
+            </div>
           </div>
-          <div className="flex flex-col">
-            <label className="mb-1">Y Coordinate (0-14)</label>
-            <input 
-              type="number" 
-              placeholder="Y" 
-              min="0" 
-              max="14"
-              value={newObstacle.y}
-              onChange={(e) => {
-                const value = Math.min(14, Math.max(0, Number(e.target.value)));
-                setNewObstacle(prev => ({ ...prev, y: value }));
-                setError(null);
-              }}
-              className="p-2 border rounded w-24"
-            />
-          </div>
-          <div className="flex items-end space-x-2">
+          <div className="flex space-x-2 w-full sm:w-auto">
             <button 
               onClick={handleAddObstacle} 
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+              className="flex-1 sm:flex-none bg-[#290F1F] text-gray-200 px-6 py-2 rounded hover:bg-[#1F0A17] transition"
             >
-              Add Obstacle
+              Add
             </button>
             <button 
               onClick={handleClearObstacles} 
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+              className="flex-1 sm:flex-none bg-red-900 text-red-200 px-6 py-2 rounded hover:bg-red-800 transition"
             >
-              Clear Obstacles
+              Clear
             </button>
           </div>
         </div>
         {error && (
-          <div className="mt-2 text-red-500 text-sm">
+          <div className="mt-2 text-red-300">
             {error}
           </div>
         )}
@@ -198,14 +201,14 @@ const ObstacleSetter = () => {
               {obstacles.map((obs, index) => (
                 <div 
                   key={index} 
-                  className="bg-gray-200 p-1 rounded text-center text-sm"
+                  className="bg-[#290F1F] p-1 rounded text-center text-sm text-gray-200"
                 >
                   ({obs.x}, {obs.y})
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-500">No obstacles</p>
+            <p className="text-gray-400">No obstacles</p>
           )}
         </div>
       </div>

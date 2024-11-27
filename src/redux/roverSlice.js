@@ -7,6 +7,7 @@ const initialState = {
   obstacles: [],
   error: null,
   commandHistory: [],
+  trail: [{ x: 0, y: 0 }], // trail tracking
 };
 
 const directionMap = {
@@ -85,6 +86,14 @@ const roverSlice = createSlice({
           state.error = 'Obstacle detected! Movement stopped.';
         } else {
           state.position = newPosition;
+          
+          // added new position to trail, to avoid duplicates
+          const isDuplicate = state.trail.some(
+            pos => pos.x === newPosition.x && pos.y === newPosition.y
+          );
+          if (!isDuplicate) {
+            state.trail.push({ ...newPosition });
+          }
         }
       }
     
@@ -96,15 +105,15 @@ const roverSlice = createSlice({
     resetError: (state) => {
       state.error = null;
     },
-    
-resetRover: (state, action) => {
-  const payload = action.payload || {};
-  state.position = payload.position || { x: 0, y: 0 };
-  state.direction = payload.direction || 'N';
-  state.obstacles = [];
-  state.error = null;
-  state.commandHistory = [];
-},
+    resetRover: (state, action) => {
+      const payload = action.payload || {};
+      state.position = payload.position || { x: 0, y: 0 };
+      state.direction = payload.direction || 'N';
+      state.obstacles = [];
+      state.error = null;
+      state.commandHistory = [];
+      state.trail = [{ x: state.position.x, y: state.position.y }];
+    },
   },
 });
 
