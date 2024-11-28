@@ -5,7 +5,7 @@ import { setObstacles, resetRover } from '../redux/roverSlice';
 const ObstacleSetter = () => {
   const dispatch = useDispatch();
   const { gridSize, position, direction, obstacles } = useSelector((state) => state.rover);
-  const [newObstacle, setNewObstacle] = useState({ x: 0, y: 0 });
+  const [newObstacle, setNewObstacle] = useState({ x: "", y: "" });
   const [initialSetup, setInitialSetup] = useState({
     x: position.x,
     y: position.y,
@@ -16,7 +16,7 @@ const ObstacleSetter = () => {
   const handleInitialSetup = () => {
     const { x, y, direction } = initialSetup;
     
-    // Validate initial position
+    // initial position validation
     if (x < 0 || x >= gridSize.width || y < 0 || y >= gridSize.height) {
       setError(`Initial position must be within grid (0-${gridSize.width-1}, 0-${gridSize.height-1})`);
       return;
@@ -65,6 +65,7 @@ const ObstacleSetter = () => {
     
     dispatch(setObstacles(updatedObstacles));
     setError(null);
+    setNewObstacle({ x: "", y: "" }); // Reset the inputs
   };
 
   const handleClearObstacles = () => {
@@ -84,7 +85,7 @@ const ObstacleSetter = () => {
               max="14"
               value={initialSetup.x}
               onChange={(e) => {
-                const value = Math.min(14, Math.max(0, Number(e.target.value)));
+                const value = Math.min(14, Math.max(0, Number(e.target.value) || ""));
                 setInitialSetup(prev => ({ ...prev, x: value }));
                 setError(null);
               }}
@@ -99,7 +100,7 @@ const ObstacleSetter = () => {
               max="14"
               value={initialSetup.y}
               onChange={(e) => {
-                const value = Math.min(14, Math.max(0, Number(e.target.value)));
+                const value = Math.min(14, Math.max(0, Number(e.target.value) || ""));
                 setInitialSetup(prev => ({ ...prev, y: value }));
                 setError(null);
               }}
@@ -136,7 +137,7 @@ const ObstacleSetter = () => {
         )}
       </div>
 
-      {/* Obstacles Section */}
+      {/* obstacles Section */}
       <div>
         <h3 className="text-lg font-bold mb-4">Add Obstacles</h3>
         <div className="flex flex-col sm:flex-row items-end space-y-2 sm:space-y-0 sm:space-x-2">
@@ -145,12 +146,11 @@ const ObstacleSetter = () => {
               <label className="block mb-1">X Coordinate (0-14)</label>
               <input 
                 type="number" 
-                placeholder="X" 
                 min="0" 
                 max="14"
                 value={newObstacle.x}
                 onChange={(e) => {
-                  const value = Math.min(14, Math.max(0, Number(e.target.value)));
+                  const value = Math.min(14, Math.max(0, Number(e.target.value) || ""));
                   setNewObstacle(prev => ({ ...prev, x: value }));
                   setError(null);
                 }}
@@ -161,12 +161,11 @@ const ObstacleSetter = () => {
               <label className="block mb-1">Y Coordinate (0-14)</label>
               <input 
                 type="number" 
-                placeholder="Y" 
                 min="0" 
                 max="14"
                 value={newObstacle.y}
                 onChange={(e) => {
-                  const value = Math.min(14, Math.max(0, Number(e.target.value)));
+                  const value = Math.min(14, Math.max(0, Number(e.target.value) || ""));
                   setNewObstacle(prev => ({ ...prev, y: value }));
                   setError(null);
                 }}
