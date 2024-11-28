@@ -15,7 +15,7 @@ const Grid = () => {
           <img 
             src="/rover.svg" 
             alt="Rover" 
-            className="w-full h-full object-contain transform"
+            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 object-contain transform"
             style={{
               transform: `rotate(${
                 direction === 'N' ? 0 :
@@ -36,7 +36,7 @@ const Grid = () => {
           <img 
             src="/rock.svg" 
             alt="Obstacle" 
-            className="w-full h-full object-contain"
+            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 object-contain"
           />
         </div>
       );
