@@ -2,13 +2,15 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 const Grid = () => {
+  // Extracting grid properties and state from the Redux store
   const { gridSize, position, direction, obstacles = [], trail = [] } = useSelector((state) => state.rover);
 
+  // to render individual grid cells
   const renderCell = (x, y) => {
-    // if this cell is part of the trail
+    // Check if this cell is part of the trail
     const isTrail = trail.some(pos => pos.x === x && pos.y === y);
     
-    // rover position
+    // Render the rover's position
     if (position.x === x && position.y === y) {
       return (
         <div className="flex items-center justify-center">
@@ -18,10 +20,10 @@ const Grid = () => {
             className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 object-contain transform"
             style={{
               transform: `rotate(${
-                direction === 'N' ? 0 :
-                direction === 'E' ? 90 :
-                direction === 'S' ? 180 :
-                270
+                direction === 'N' ? 0 :        
+                direction === 'E' ? 90 :       
+                direction === 'S' ? 180 :      
+                270                           
               }deg)`
             }}
           />
@@ -29,7 +31,7 @@ const Grid = () => {
       );
     }
     
-    // obstacles
+    // Render obstacles if any are in this cell
     if (obstacles.some((obs) => obs.x === x && obs.y === y)) {
       return (
         <div className="flex items-center justify-center">
@@ -42,7 +44,7 @@ const Grid = () => {
       );
     }
     
-    // trail visualization
+    // Render trail visualization for cells the rover has passed
     if (isTrail) {
       return (
         <div 
@@ -52,7 +54,7 @@ const Grid = () => {
       );
     }
     
-    // empty cell
+    // Render an empty cell if none of the above conditions are met
     return <div className="border border-[#7F1D1D]"></div>;
   };
 
@@ -61,17 +63,17 @@ const Grid = () => {
       <div 
         className="grid gap-0 rounded-lg overflow-hidden bg-[#661B30] border-4 border-[#290F1F]"
         style={{ 
-          gridTemplateColumns: `repeat(${gridSize.width}, 1fr)`,
-          aspectRatio: '1/1',
+          gridTemplateColumns: `repeat(${gridSize.width}, 1fr)`, 
+          aspectRatio: '1/1',  // Ensure the grid is square
         }}
       >
         {Array.from({ length: gridSize.height }, (_, y) =>
           Array.from({ length: gridSize.width }, (_, x) => (
             <div 
-              key={`${x}-${y}`} 
+              key={`${x}-${y}`}                              
               className="aspect-square flex items-center justify-center border border-[#7F1D1D]"
             >
-              {renderCell(x, y)}
+              {renderCell(x, y)}                           
             </div>
           ))
         )}
