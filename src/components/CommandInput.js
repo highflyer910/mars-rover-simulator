@@ -4,27 +4,33 @@ import { moveRover, resetRover } from '../redux/roverSlice';
 
 const CommandInput = () => {
   const dispatch = useDispatch();
+
+  // Extracting state properties from the Redux store
   const { error, commandHistory, position, direction } = useSelector((state) => state.rover);
 
+  // handles keyboard key press events (f, b, l, r)
   const handleKeyPress = (e) => {
     const validKeys = ['f', 'b', 'l', 'r'];
     if (validKeys.includes(e.key.toLowerCase())) {
-      dispatch(moveRover(e.key.toLowerCase()));
+      dispatch(moveRover(e.key.toLowerCase())); // dispatches the moveRover action
     }
   };
 
+  // Resets the rover's position and state
   const handleReset = () => {
     dispatch(resetRover());
   };
 
+  // Handles mobile button commands (f, b, l, r)
   const handleMobileCommand = (command) => {
     dispatch(moveRover(command));
   };
 
+  // Adds an event listener for keyboard commands when the component mounts
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener('keydown', handleKeyPress); // Listen for keypress events
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener('keydown', handleKeyPress); // Cleanup event listener on unmount
     };
   });
 
@@ -41,7 +47,7 @@ const CommandInput = () => {
         </div>
       )}
 
-      {/* mobile Controls */}
+      {/* Mobile controls for navigating the rover */}
       <div className="sm:hidden grid grid-cols-3 grid-rows-3 gap-2 max-w-xs mx-auto">
         <div></div>
         <button 
@@ -58,11 +64,13 @@ const CommandInput = () => {
         >
           ← Turn Left
         </button>
+        
         <div className="flex items-center justify-center">
           <span className="text-gray-300 font-bold">
             {`(${position.x}, ${position.y}) ${direction}`}
           </span>
         </div>
+        
         <button 
           onClick={() => handleMobileCommand('r')}
           className="bg-[#661B30] text-gray-200 p-3 rounded hover:bg-[#521526] transition flex items-center justify-center"
@@ -80,6 +88,7 @@ const CommandInput = () => {
         <div></div>
       </div>
 
+      {/* Reset button */}
       <div className="flex justify-center space-x-4">
         <button 
           onClick={handleReset} 
@@ -89,6 +98,7 @@ const CommandInput = () => {
         </button>
       </div>
 
+      {/* Command history display */}
       <div className="mt-4">
         <h3 className="text-lg font-bold">Command History:</h3>
         <div className="bg-[#290F1F] p-2 rounded text-gray-200">

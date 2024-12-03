@@ -4,24 +4,31 @@ import { setObstacles, resetRover } from '../redux/roverSlice';
 
 const ObstacleSetter = () => {
   const dispatch = useDispatch();
+
+  // Extract values from Redux state for grid size, rover position, direction, and obstacles
   const { gridSize, position, direction, obstacles } = useSelector((state) => state.rover);
+
   const [newObstacle, setNewObstacle] = useState({ x: "", y: "" });
+
   const [initialSetup, setInitialSetup] = useState({
     x: position.x,
     y: position.y,
     direction: direction
   });
+
   const [error, setError] = useState(null);
 
+  // Handle initial rover setup validation and update Redux state
   const handleInitialSetup = () => {
     const { x, y, direction } = initialSetup;
-    
-    // initial position validation
+
+    // ensure initial position is within grid
     if (x < 0 || x >= gridSize.width || y < 0 || y >= gridSize.height) {
-      setError(`Initial position must be within grid (0-${gridSize.width-1}, 0-${gridSize.height-1})`);
+      setError(`Initial position must be within grid (0-${gridSize.width - 1}, 0-${gridSize.height - 1})`);
       return;
     }
 
+    // Prevent placing the rover on an obstacle
     const isObstacleConflict = obstacles.some(
       obs => obs.x === Number(x) && obs.y === Number(y)
     );
@@ -31,24 +38,27 @@ const ObstacleSetter = () => {
       return;
     }
 
-    dispatch(resetRover({ 
-      position: { x, y }, 
-      direction 
+    // Dispatch action to reset rover position and direction
+    dispatch(resetRover({
+      position: { x, y },
+      direction
     }));
     
+    // Clear any previous error messages
     setError(null);
   };
 
+  // adding a new obstacle to the grid
   const handleAddObstacle = () => {
     const { x, y } = newObstacle;
-    
-    // obstacle placement validation
+
+    // Validate obstacle position is within grid bounds
     if (x < 0 || x >= gridSize.width || y < 0 || y >= gridSize.height) {
-      setError(`Obstacle must be within grid (0-${gridSize.width-1}, 0-${gridSize.height-1})`);
+      setError(`Obstacle must be within grid (0-${gridSize.width - 1}, 0-${gridSize.height - 1})`);
       return;
     }
 
-    // check for duplicate obstacles
+    // Prevent duplicate obstacles at the same position
     const isDuplicate = obstacles.some(
       obs => obs.x === Number(x) && obs.y === Number(y)
     );
@@ -58,18 +68,22 @@ const ObstacleSetter = () => {
       return;
     }
 
+    // add the new obstacle to the list
     const updatedObstacles = [
       ...obstacles, 
       { x: Number(x), y: Number(y) }
     ];
-    
+
+    // Dispatch action to update the obstacles list
     dispatch(setObstacles(updatedObstacles));
+
     setError(null);
-    setNewObstacle({ x: "", y: "" }); // Reset the inputs
+    setNewObstacle({ x: "", y: "" });
   };
 
+  // clearing all obstacles from the grid
   const handleClearObstacles = () => {
-    dispatch(setObstacles([]));
+    dispatch(setObstacles([])); // Dispatch action to clear obstacles
   };
 
   return (
@@ -107,13 +121,14 @@ const ObstacleSetter = () => {
               className="p-2 border rounded w-full text-gray-900"
             />
           </div>
+          {/* Dropdown for direction */}
           <div className="sm:col-span-2">
             <label className="block mb-1">Direction</label>
             <select
               value={initialSetup.direction}
               onChange={(e) => {
                 setInitialSetup(prev => ({ ...prev, direction: e.target.value }));
-                setError(null);
+                setError(null); 
               }}
               className="p-2 border rounded w-full text-gray-900"
             >
@@ -137,9 +152,10 @@ const ObstacleSetter = () => {
         )}
       </div>
 
-      {/* obstacles Section */}
+      {/* Section for adding obstacles */}
       <div>
         <h3 className="text-lg font-bold mb-4">Add Obstacles</h3>
+        {/* Inputs for obstacle coordinates */}
         <div className="flex flex-col sm:flex-row items-end space-y-2 sm:space-y-0 sm:space-x-2">
           <div className="flex space-x-2 w-full">
             <div className="flex-1">
@@ -207,7 +223,7 @@ const ObstacleSetter = () => {
               ))}
             </div>
           ) : (
-            <p className="text-gray-400">No obstacles</p>
+            <div className="text-gray-400 text-sm">No obstacles added</div>
           )}
         </div>
       </div>

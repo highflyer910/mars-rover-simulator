@@ -112,7 +112,7 @@ const roverSlice = createSlice({
       state.error = null; 
     },
     
-    // Reset the rover state to initial values
+    // Reset the rover state to initial state
     resetRover: (state, action) => {
       const payload = action.payload || {};
       state.position = payload.position || { x: 0, y: 0 };
