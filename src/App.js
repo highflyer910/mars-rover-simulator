@@ -2,6 +2,8 @@ import React from 'react';
 import Grid from './components/Grid';
 import CommandInput from './components/CommandInput';
 import ObstacleSetter from './components/ObstacleSetter';
+import { Analytics } from "@vercel/analytics/react"
+
 
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
           <ObstacleSetter />
         </div>
       </div>
+      <Analytics />
     </div>
   );
 }
