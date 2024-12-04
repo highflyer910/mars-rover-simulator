@@ -18,7 +18,7 @@ const ObstacleSetter = () => {
 
   const [error, setError] = useState(null);
 
-  // Handle initial rover setup validation and update Redux state
+  // Handle initial setup validation and update Redux state
   const handleInitialSetup = () => {
     const { x, y, direction } = initialSetup;
 
